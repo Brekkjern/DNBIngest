@@ -80,18 +80,15 @@ def main(input_file, destination_folder):
     uttak = [transaksjon for transaksjon in transaksjoner if transaksjon["uttak"]]
 
     # Skriv ut innskuddene denne måneden
-    with open(os.path.join(destination_folder, "innskudd.csv"), mode="w+", encoding="utf-8", newline="") as innskuddsfil:
-        writer = csv.DictWriter(innskuddsfil, csvsekvens, dialect="dnb", extrasaction="ignore")
+    eksporter_transaksjoner(destination_folder, "innskudd.csv", innskudd, csvsekvens)
+    eksporter_transaksjoner(destination_folder, "uttak.csv", uttak, csvsekvens)
 
+
+def eksporter_transaksjoner(destinasjonsmappe, filnavn, transaksjoner, csvsekvens):
+    with open(os.path.join(destinasjonsmappe, filnavn), mode="w+", encoding="utf-8", newline="") as fil:
+        writer = csv.DictWriter(fil, csvsekvens, dialect="dnb", extrasaction="ignore")
         writer.writeheader()
-        writer.writerows(innskudd)
-
-    # Skriv ut uttakene denne måneden
-    with open(os.path.join(destination_folder, "uttak.csv"), mode="w+", encoding="utf-8", newline="") as uttaksfil:
-        writer = csv.DictWriter(uttaksfil, csvsekvens, dialect="dnb", extrasaction="ignore")
-
-        writer.writeheader()
-        writer.writerows(uttak)
+        writer.writerows(transaksjoner)
 
 
 class Parser(object):
