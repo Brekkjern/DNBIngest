@@ -1,0 +1,13 @@
+# IntelliJ
+.idea
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+
+# Venv
+venv
+
+# Build files
+dnbingest.egg-info

@@ -1,0 +1,26 @@
+[
+  {
+    "navn": "Meny",
+    "tag": "Food",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)varekjøp.*meny"},
+  {
+    "navn": "Narvesen",
+    "tag": "Food",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)varekjøp.*narvesen"},
+  {
+    "navn": "Rema",
+    "tag": "Food",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)varekjøp.*rema"},
+  {
+    "navn": "Coop",
+    "tag": "Food",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)varekjøp.*coop"}
+]
