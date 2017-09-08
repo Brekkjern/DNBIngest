@@ -11,6 +11,37 @@ __location__ = os.path.realpath(
                  ))
 
 
+class Regel(object):
+    def __init__(self, dictionary):
+        for key, value in dictionary.items():
+            setattr(self, key, value)
+
+        self.regex = re.compile(self.regex)
+
+    def parse_transaction(self, transaksjon: dict) -> bool:
+        if not transaksjon["uttak"] and not self.uttak:
+            return False
+
+        if not transaksjon["innskudd"] and not self.innskudd:
+            return False
+
+        regex_result = self.regex.match(transaksjon["beskrivelse"])
+
+        if regex_result:
+            transaksjon["tag"] = self.tag
+            transaksjon["navn"] = self.navn
+            return True
+
+        return False
+
+
+def eksporter_transaksjoner(destinasjonsmappe: str, filnavn: str, transaksjoner: list, csvsekvens: list):
+    with open(os.path.join(destinasjonsmappe, filnavn), mode="w+", encoding="utf-8", newline="") as fil:
+        writer = csv.DictWriter(fil, csvsekvens, dialect="spreadsheet", extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(transaksjoner)
+
+
 @click.command()
 @click.argument(
     'transaksjonsfil',
@@ -89,34 +120,3 @@ def main(transaksjonsfil: str, destination_folder: str) -> None:
     # Skriv ut innskuddene denne måneden
     eksporter_transaksjoner(destination_folder, "innskudd.txt", innskudd, csvsekvens)
     eksporter_transaksjoner(destination_folder, "uttak.txt", uttak, csvsekvens)
-
-
-def eksporter_transaksjoner(destinasjonsmappe: str, filnavn: str, transaksjoner: list, csvsekvens: list):
-    with open(os.path.join(destinasjonsmappe, filnavn), mode="w+", encoding="utf-8", newline="") as fil:
-        writer = csv.DictWriter(fil, csvsekvens, dialect="spreadsheet", extrasaction="ignore")
-        writer.writeheader()
-        writer.writerows(transaksjoner)
-
-
-class Regel(object):
-    def __init__(self, dictionary):
-        for key, value in dictionary.items():
-            setattr(self, key, value)
-
-        self.regex = re.compile(self.regex)
-
-    def parse_transaction(self, transaksjon: dict) -> bool:
-        if not transaksjon["uttak"] and not self.uttak:
-            return False
-
-        if not transaksjon["innskudd"] and not self.innskudd:
-            return False
-
-        regex_result = self.regex.match(transaksjon["beskrivelse"])
-
-        if regex_result:
-            transaksjon["tag"] = self.tag
-            transaksjon["navn"] = self.navn
-            return True
-
-        return False
