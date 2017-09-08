@@ -29,14 +29,14 @@ def main(input_file, destination_folder):
     # Registrere DNB sin CSV dialekt
     csv.register_dialect("dnb", delimiter=";")
 
-    parsers = list()
+    regler = list()
 
-    # Laste inn transaction paresere fra parser fil
-    with open(os.path.join(__location__, "parsers.json"), encoding="utf-8", newline="") as parserfile:
+    # Laste inn transaksjonsregler fra regel fil
+    with open(os.path.join(__location__, "regler.json"), encoding="utf-8", newline="") as parserfile:
         jsondata = json.load(parserfile)
 
-        for parser in jsondata:
-            parsers.append(Parser(parser))
+        for regel in jsondata:
+            regler.append(Regel(regel))
 
     transaksjoner = list()
 
@@ -70,8 +70,8 @@ def main(input_file, destination_folder):
 
         transaksjoner.append(transaksjon)
 
-        for parser in parsers:
-            if parser.parse_transaction(transaksjon):
+        for regel in regler:
+            if regel.parse_transaction(transaksjon):
                 break
 
     csvsekvens = ["dato", "sum", "navn", "tag"]
@@ -91,7 +91,7 @@ def eksporter_transaksjoner(destinasjonsmappe, filnavn, transaksjoner, csvsekven
         writer.writerows(transaksjoner)
 
 
-class Parser(object):
+class Regel(object):
     def __init__(self, dictionary):
         for key, value in dictionary.items():
             setattr(self, key, value)
