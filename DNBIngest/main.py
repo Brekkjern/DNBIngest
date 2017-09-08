@@ -29,6 +29,9 @@ def main(transaksjonsfil: str, destination_folder: str) -> None:
     # Registrere DNB sin CSV dialekt
     csv.register_dialect("dnb", delimiter=";")
 
+    # Registrere resultatdialekten
+    csv.register_dialect("spreadsheet", delimiter="\t")
+
     regler = list()
 
     # Laste inn transaksjonsregler fra regel fil
@@ -82,13 +85,13 @@ def main(transaksjonsfil: str, destination_folder: str) -> None:
     uttak = [transaksjon for transaksjon in transaksjoner if transaksjon["uttak"]]
 
     # Skriv ut innskuddene denne måneden
-    eksporter_transaksjoner(destination_folder, "innskudd.csv", innskudd, csvsekvens)
-    eksporter_transaksjoner(destination_folder, "uttak.csv", uttak, csvsekvens)
+    eksporter_transaksjoner(destination_folder, "innskudd.txt", innskudd, csvsekvens)
+    eksporter_transaksjoner(destination_folder, "uttak.txt", uttak, csvsekvens)
 
 
 def eksporter_transaksjoner(destinasjonsmappe: str, filnavn: str, transaksjoner: list, csvsekvens: list):
     with open(os.path.join(destinasjonsmappe, filnavn), mode="w+", encoding="utf-8", newline="") as fil:
-        writer = csv.DictWriter(fil, csvsekvens, dialect="dnb", extrasaction="ignore")
+        writer = csv.DictWriter(fil, csvsekvens, dialect="spreadsheet", extrasaction="ignore")
         writer.writeheader()
         writer.writerows(transaksjoner)
 
