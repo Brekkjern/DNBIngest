@@ -75,10 +75,12 @@ def main(transaksjonsfil: str, destination_folder: str) -> None:
 
         transaksjoner.append(transaksjon)
 
+        # Forsøk reglene på transaksjonen til den får et treff
         for regel in regler:
             if regel.parse_transaction(transaksjon):
                 break
 
+    # Liste over hvilke kolonner som skal brukes i filen som spyttes ut
     csvsekvens = ["dato", "sum", "navn", "tag"]
 
     innskudd = [transaksjon for transaksjon in transaksjoner if transaksjon["innskudd"]]
