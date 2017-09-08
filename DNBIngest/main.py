@@ -13,7 +13,7 @@ __location__ = os.path.realpath(
 
 @click.command()
 @click.argument(
-    'input-file',
+    'transaksjonsfil',
     nargs=1,
     type=click.File("r")
 )
@@ -25,7 +25,7 @@ __location__ = os.path.realpath(
         resolve_path=True,
     )
 )
-def main(input_file, destination_folder):
+def main(transaksjonsfil: str, destination_folder: str) -> None:
     # Registrere DNB sin CSV dialekt
     csv.register_dialect("dnb", delimiter=";")
 
@@ -41,10 +41,12 @@ def main(input_file, destination_folder):
     transaksjoner = list()
 
     # Laste inn CSV filen med DNB sitt format
-    reader = csv.DictReader(input_file, dialect="dnb")
+    reader = csv.DictReader(transaksjonsfil, dialect="dnb")
 
     # Parse transaksjonslisten
     for row in reader:
+
+        # Lag transaksjonsdictionary
         transaksjon = dict()
 
         transaksjon["dato"] = datetime.datetime.strptime(row["Dato"], "%d.%m.%Y").date()
@@ -84,7 +86,7 @@ def main(input_file, destination_folder):
     eksporter_transaksjoner(destination_folder, "uttak.csv", uttak, csvsekvens)
 
 
-def eksporter_transaksjoner(destinasjonsmappe, filnavn, transaksjoner, csvsekvens):
+def eksporter_transaksjoner(destinasjonsmappe: str, filnavn: str, transaksjoner: list, csvsekvens: list):
     with open(os.path.join(destinasjonsmappe, filnavn), mode="w+", encoding="utf-8", newline="") as fil:
         writer = csv.DictWriter(fil, csvsekvens, dialect="dnb", extrasaction="ignore")
         writer.writeheader()
