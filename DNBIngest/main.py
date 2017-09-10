@@ -35,13 +35,6 @@ class Regel(object):
         return False
 
 
-def eksporter_transaksjoner(destinasjonsmappe: str, filnavn: str, transaksjoner: list, csvsekvens: list):
-    with open(os.path.join(destinasjonsmappe, filnavn), mode="w+", encoding="utf-8", newline="") as fil:
-        writer = csv.DictWriter(fil, csvsekvens, dialect="spreadsheet", extrasaction="ignore")
-        writer.writeheader()
-        writer.writerows(transaksjoner)
-
-
 @click.command()
 @click.argument(
     'transaksjonsfil',
@@ -72,10 +65,24 @@ def main(transaksjonsfil: str, destinasjonsmappe: str) -> None:
         for regel in jsondata:
             regler.append(Regel(regel))
 
-    transaksjoner = list()
-
     # Laste inn CSV filen med DNB sitt format
     reader = csv.DictReader(transaksjonsfil, dialect="dnb")
+
+    # Åpner destinasjonsfilene for skriving
+    innskudd_fil = open(os.path.join(destinasjonsmappe, "innskudd.txt"), mode="w+", encoding="utf-8", newline="")
+    innskudd_writer = csv.DictWriter(
+        innskudd_fil,
+        ["dato", "sum", "navn", "tag"],
+        dialect="spreadsheet",
+        extrasaction="ignore"
+    )
+    uttak_fil = open(os.path.join(destinasjonsmappe, "uttak.txt"), mode="w+", encoding="utf-8", newline="")
+    uttak_writer = csv.DictWriter(
+        uttak_fil,
+        ["dato", "sum", "navn", "tag"],
+        dialect="spreadsheet",
+        extrasaction="ignore"
+    )
 
     # Parse transaksjonslisten
     for row in reader:
@@ -111,12 +118,12 @@ def main(transaksjonsfil: str, destinasjonsmappe: str) -> None:
             if regel.parse_transaction(transaksjon):
                 break
 
-    # Liste over hvilke kolonner som skal brukes i filen som spyttes ut
-    csvsekvens = ["dato", "sum", "navn", "tag"]
+        if transaksjon["innskudd"]:
+            innskudd_writer.writerow(transaksjon)
+        elif transaksjon["uttak"]:
+            uttak_writer.writerow(transaksjon)
+        else:
+            print("Transaksjon mangler verdi for innskudd/uttak. {0[dato]} - {0[beskrivelse]}: {0[innskudd]} - {0[uttak]}".format(transaksjon))
 
-    innskudd = [transaksjon for transaksjon in transaksjoner if transaksjon["innskudd"]]
-    uttak = [transaksjon for transaksjon in transaksjoner if transaksjon["uttak"]]
-
-    # Skriv ut innskuddene denne måneden
-    eksporter_transaksjoner(destination_folder, "innskudd.txt", innskudd, csvsekvens)
-    eksporter_transaksjoner(destination_folder, "uttak.txt", uttak, csvsekvens)
+    innskudd_fil.close()
+    uttak_fil.close()
