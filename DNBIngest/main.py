@@ -49,7 +49,16 @@ class Regel(object):
         resolve_path=True,
     )
 )
-def main(transaksjonsfil: str, destinasjonsmappe: str) -> None:
+@click.option(
+    '--csvheader/--no-csvheader',
+    default=True
+)
+@click.option(
+    '--month',
+    type=click.IntRange(1, 12),
+    help="Parser kun transaksjoner i den valgte måneden"
+)
+def main(transaksjonsfil: str, destinasjonsmappe: str, csvheader: bool, month: int=None) -> None:
     # Registrere DNB sin CSV dialekt
     csv.register_dialect("dnb", delimiter=";")
 
@@ -84,6 +93,10 @@ def main(transaksjonsfil: str, destinasjonsmappe: str) -> None:
         extrasaction="ignore"
     )
 
+    if csvheader:
+        innskudd_writer.writeheader()
+        uttak_writer.writeheader()
+
     # Parse transaksjonslisten
     for row in reader:
 
@@ -111,7 +124,9 @@ def main(transaksjonsfil: str, destinasjonsmappe: str) -> None:
 
         transaksjon["sum"] = transaksjon["uttak"] + transaksjon["innskudd"]
 
-        transaksjoner.append(transaksjon)
+        # Skipper transaksjoner som ikke matcher riktig måned
+        if month and not transaksjon["dato"].month == month:
+            continue
 
         # Forsøk reglene på transaksjonen til den får et treff
         for regel in regler:
