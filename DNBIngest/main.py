@@ -18,12 +18,12 @@ class Regel(object):
 
         self.regex = re.compile(self.regex)
 
-    def parse_transaction(self, transaksjon: dict) -> bool:
-        if not transaksjon["uttak"] and not self.uttak:
-            return False
-
-        if not transaksjon["innskudd"] and not self.innskudd:
-            return False
+    def parse_transaksjon(self, transaksjon: dict) -> bool:
+        # if not transaksjon["uttak"] and not self.uttak:
+        #     return False
+        #
+        # if not transaksjon["innskudd"] and not self.innskudd:
+        #     return False
 
         regex_result = self.regex.match(transaksjon["beskrivelse"])
 
