@@ -49,14 +49,14 @@ def eksporter_transaksjoner(destinasjonsmappe: str, filnavn: str, transaksjoner:
     type=click.File("r")
 )
 @click.argument(
-    'destination-folder',
+    'destinasjonsmappe',
     nargs=1,
     type=click.Path(
         writable=True,
         resolve_path=True,
     )
 )
-def main(transaksjonsfil: str, destination_folder: str) -> None:
+def main(transaksjonsfil: str, destinasjonsmappe: str) -> None:
     # Registrere DNB sin CSV dialekt
     csv.register_dialect("dnb", delimiter=";")
 
