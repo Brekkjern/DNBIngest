@@ -22,5 +22,77 @@
     "tag": "Food",
     "innskudd": false,
     "uttak": true,
-    "regex": "(?i)varekjøp.*coop"}
+    "regex": "(?i)varekjøp.*coop"},
+  {
+    "navn": "Foodora",
+    "tag": "Restaurant",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)Visa.*Foodora"},
+  {
+    "navn": "Kolsås Leir",
+    "tag": "Food",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)Varekjøp Kolsås Leir Rødskifervn Kolsås"},
+  {
+    "navn": "Kolsås Leir",
+    "tag": "Food",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)Visa.*Iss.*Kolsaas Leir"},
+  {
+    "navn": "Joker",
+    "tag": "Food",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)varekjøp.*Joker"},
+  {
+    "navn": "ICE.net",
+    "tag": "Phone",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)Giro.*Ice Communication"},
+  {
+    "navn": "NSB",
+    "tag": "PublicTransit",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)Visa.*NSB AS"},
+  {
+    "navn": "DNB Forsikring",
+    "tag": "Insurance",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)Giro.*DNB Forsikring Efaktura"},
+  {
+    "navn": "Spotify",
+    "tag": "Music",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)Visa.*Spotify"},
+  {
+    "navn": "Steam",
+    "tag": "Games",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)Visa.*Steamgames.com"},
+  {
+    "navn": "Apotek",
+    "tag": "Pharmacy",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)Varekjøp.*Apotek"},
+  {
+    "navn": "Forsvaret",
+    "tag": "Paycheck",
+    "innskudd": true,
+    "uttak": false,
+    "regex": "(?i)Lønn.*Forsvaret"},
+  {
+    "navn": "Dressmmann",
+    "tag": "Clothes",
+    "innskudd": false,
+    "uttak": true,
+    "regex": "(?i)Varekjøp.*Dressmann"}
 ]
