@@ -113,16 +113,16 @@ def main(transaksjonsfil: str, destinasjonsmappe: str, csvheader: bool, month: i
             transaksjon["rentedato"] = None
 
         try:
-            transaksjon["uttak"] = float(row["Uttak"].strip(".").replace(",", "."))
+            transaksjon["uttak"] = float(row["Uttak"].replace(".", "").replace(",", "."))
         except ValueError:
             transaksjon["uttak"] = float()
 
         try:
-            transaksjon["innskudd"] = float(row["Innskudd"].strip(".").replace(",", "."))
+            transaksjon["innskudd"] = float(row["Innskudd"].replace(".", "").replace(",", "."))
         except ValueError:
             transaksjon["innskudd"] = float()
 
-        transaksjon["sum"] = transaksjon["uttak"] + transaksjon["innskudd"]
+        transaksjon["sum"] = str(transaksjon["uttak"] + transaksjon["innskudd"]).replace(".", ",")
 
         # Skipper transaksjoner som ikke matcher riktig måned
         if month and not transaksjon["dato"].month == month:
@@ -130,7 +130,7 @@ def main(transaksjonsfil: str, destinasjonsmappe: str, csvheader: bool, month: i
 
         # Forsøk reglene på transaksjonen til den får et treff
         for regel in regler:
-            if regel.parse_transaction(transaksjon):
+            if regel.parse_transaksjon(transaksjon):
                 break
 
         if transaksjon["innskudd"]:
